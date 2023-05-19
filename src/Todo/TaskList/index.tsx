@@ -2,10 +2,16 @@ import React, { useContext } from "react";
 import TaskListStyle from "./TaskList.style";
 import { Checkbox, FontIcon, Stack, mergeStyles } from "@fluentui/react";
 import { TodoContext } from "../TodoProvider";
+import { ActionTypeEnum } from "../Types";
 
 export const TaskList = () => {
-  const { activeTasks } = useContext(TodoContext);
+  const { activeTasks, dispatch } = useContext(TodoContext);
 
+  const onTaskDelete = (id: string) => {
+    if (window.confirm("Tem certeza que você quer apagar a tarefa?")) {
+      dispatch({ type: ActionTypeEnum.Delete, data: { id } });
+    }
+  };
   return (
     <div>
       {activeTasks.map((task) => {
@@ -25,7 +31,11 @@ export const TaskList = () => {
                 iconName="EditNote"
                 className={TaskListStyle.iconStyle}
               />
-              <FontIcon iconName="Delete" className={TaskListStyle.iconStyle} />
+              <FontIcon
+                iconName="Delete"
+                className={TaskListStyle.iconStyle}
+                onClick={() => onTaskDelete(task.id)}
+              />
             </Stack>
           </Stack>
         );

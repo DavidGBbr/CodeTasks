@@ -1,18 +1,45 @@
 import { MessageBar, MessageBarType, Stack } from "@fluentui/react";
 import FormStyle from "./TaskForm.style";
-import { useState } from "react";
+import useInput from "./useInput";
+import { useContext, useEffect, useState } from "react";
+import { TodoContext } from "../TodoProvider";
+import { ActionTypeEnum, ITask } from "../Types";
 
 const TaskForm = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const { dispatch } = useContext(TodoContext);
 
-  const handleChange =
-    (setValue: any) =>
-    (event: React.FormEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-      setValue(event.currentTarget.value);
+  const title = useInput("");
+  const description = useInput("");
+  const [showMessage, setShowMessage] = useState<{
+    type: MessageBarType;
+    message: string;
+  }>({ type: MessageBarType.success, message: "" });
+
+  useEffect(() => {
+    if (showMessage.message) {
+      setTimeout(() => {
+        setShowMessage({ type: MessageBarType.success, message: "" });
+      }, 1000);
+    }
+  }, [showMessage.message]);
+
+  function onFormSubmit(event: React.FormEvent) {
+    event.preventDefault();
+    const data: ITask = {
+      id: "",
+      title: title.value,
+      description: description.value,
+      isFav: false,
     };
+    dispatch({ type: ActionTypeEnum.Add, data });
+    setShowMessage({
+      type: MessageBarType.success,
+      message: "Tarefa adicionada!",
+    });
+  }
+
   return (
-    <Stack>
+    <form onSubmit={onFormSubmit}>
       <label className={FormStyle.taskLabel} htmlFor="title">
         Título da Tarefa
       </label>
@@ -20,8 +47,7 @@ const TaskForm = () => {
         className={FormStyle.taskInput}
         type="text"
         id="title"
-        value={title}
-        onChange={handleChange(setTitle)}
+        {...title}
       />
       <label className={FormStyle.taskLabel} htmlFor="description">
         Descrição da Tarefa
@@ -30,21 +56,24 @@ const TaskForm = () => {
         className={FormStyle.taskInput}
         id="description"
         rows={3}
-        value={description}
-        onChange={handleChange(setDescription)}
+        {...description}
       />
 
       <Stack horizontal tokens={{ childrenGap: 20 }} style={{ marginTop: 20 }}>
         <Stack style={{ width: "80%" }}>
-          <MessageBar messageBarType={MessageBarType.success}>
-            Tarefa adicionada!
-          </MessageBar>
+          {showMessage.message && (
+            <MessageBar messageBarType={MessageBarType.success}>
+              Tarefa adicionada!
+            </MessageBar>
+          )}
         </Stack>
         <Stack style={{ width: "20%" }}>
-          <button className={FormStyle.taskBtn}>Adicionar</button>
+          <button type="submit" className={FormStyle.taskBtn}>
+            Adicionar
+          </button>
         </Stack>
       </Stack>
-    </Stack>
+    </form>
   );
 };
 

@@ -14,6 +14,7 @@ const FormStyle: IProcessedStyleSet<IFormStyle> = mergeStyleSets({
     padding: "0.5rem 0 ",
   },
   taskInput: {
+    width: "calc(100% - 15px)",
     border: "1px solid #7c5de8",
     fontSize: 16,
     padding: "0.5rem",
