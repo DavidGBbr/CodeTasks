@@ -1,30 +1,14 @@
-import React from "react";
+import React, { useContext } from "react";
 import TaskListStyle from "./TaskList.style";
 import { Checkbox, FontIcon, Stack, mergeStyles } from "@fluentui/react";
-
-interface ITask {
-  id: string;
-  title: string;
-  isFav: boolean;
-}
+import { TodoContext } from "../TodoProvider";
 
 export const TaskList = () => {
-  const tasks: ITask[] = [
-    {
-      id: "1",
-      title: "Primeira tarefa",
-      isFav: true,
-    },
-    {
-      id: "2",
-      title: "Segunda tarefa",
-      isFav: false,
-    },
-  ];
+  const { activeTasks } = useContext(TodoContext);
 
   return (
     <div>
-      {tasks.map((task) => {
+      {activeTasks.map((task) => {
         return (
           <Stack horizontal key={task.id} className={TaskListStyle.taskItem}>
             <Stack horizontal style={{ width: "85%", alignItems: "center" }}>

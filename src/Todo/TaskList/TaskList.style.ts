@@ -16,7 +16,7 @@ const TaskListStyle: IProcessedStyleSet<ITaskListStyle> = mergeStyleSets({
     marginTop: 10,
     boxShadow: "0 4px 4px rgba(0,0,0, 0.25)",
     selectors: {
-      "&:hover": { background: "#7c5de8" },
+      "&:hover": { background: "#9c66ff" },
     },
   },
   iconStyle: {
