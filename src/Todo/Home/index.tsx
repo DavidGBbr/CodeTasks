@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import HomeStyle from "./Home.style";
 import { Label, Pivot, PivotItem, Stack } from "@fluentui/react";
-import { ITask, PivotKeysEnum } from "../Types";
+import { PivotKeysEnum } from "../Types";
 import { TaskList } from "../TaskList";
 import { initializeIcons } from "@fluentui/react";
 import TodoProvider from "../TodoProvider";
@@ -10,7 +10,12 @@ initializeIcons();
 
 export const Home = () => {
   const [selectedKey, setSelectedKey] = useState<string>(PivotKeysEnum.Tasks);
+  const [editTaskId, setEditTaskId] = useState<string | null>(null);
 
+  const editTask = (id: string) => {
+    setEditTaskId(id);
+    setSelectedKey(PivotKeysEnum.TaskForm);
+  };
   return (
     <Stack className={HomeStyle.todoContainer}>
       <TodoProvider>
@@ -23,17 +28,20 @@ export const Home = () => {
             selectedKey={selectedKey}
             styles={{ root: { display: "flex", justifyContent: "center" } }}
             onLinkClick={(item?: PivotItem) => {
+              if (item?.props.itemKey !== PivotKeysEnum.TaskForm) {
+                setEditTaskId(null);
+              }
               setSelectedKey(item?.props.itemKey || PivotKeysEnum.Tasks);
             }}
           >
             <PivotItem headerText="Tarefas" itemKey={PivotKeysEnum.Tasks}>
-              <TaskList />
+              <TaskList setEditTask={editTask} />
             </PivotItem>
             <PivotItem
               headerText="Add Nova Tarefa"
               itemKey={PivotKeysEnum.TaskForm}
             >
-              <TaskForm />
+              <TaskForm editTaskId={editTaskId} />
             </PivotItem>
             <PivotItem
               headerText="Tarefas Completas"

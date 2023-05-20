@@ -5,11 +5,24 @@ import { useContext, useEffect, useState } from "react";
 import { TodoContext } from "../TodoProvider";
 import { ActionTypeEnum, ITask } from "../Types";
 
-const TaskForm = () => {
-  const { dispatch } = useContext(TodoContext);
+type Props = {
+  editTaskId: string | null;
+};
+const TaskForm = ({ editTaskId }: Props) => {
+  const { activeTasks, dispatch } = useContext(TodoContext);
 
   const title = useInput("");
   const description = useInput("");
+
+  useEffect(() => {
+    if (editTaskId) {
+      const taskData = activeTasks.find((task) => task.id === editTaskId);
+
+      title.set(taskData?.title || "");
+      description.set(taskData?.description || "");
+    }
+  }, [editTaskId]);
+
   const [showMessage, setShowMessage] = useState<{
     type: MessageBarType;
     message: string;
@@ -25,17 +38,45 @@ const TaskForm = () => {
 
   function onFormSubmit(event: React.FormEvent) {
     event.preventDefault();
-    const data: ITask = {
-      id: "",
-      title: title.value,
-      description: description.value,
-      isFav: false,
+
+    const addTaskAction = () => {
+      const data: ITask = {
+        id: "",
+        title: title.value,
+        description: description.value,
+        isFav: false,
+      };
+      dispatch({ type: ActionTypeEnum.Add, data });
+      setShowMessage({
+        type: MessageBarType.success,
+        message: "Tarefa Adicionada!",
+      });
+      title.set("");
+      description.set("");
     };
-    dispatch({ type: ActionTypeEnum.Add, data });
-    setShowMessage({
-      type: MessageBarType.success,
-      message: "Tarefa adicionada!",
-    });
+
+    const updateTaskAction = () => {
+      const taskData = activeTasks.find((task) => task.id === editTaskId);
+      if (taskData) {
+        const data: ITask = {
+          id: taskData.id || "",
+          title: title.value,
+          description: description.value,
+          isFav: taskData.isFav || false,
+        };
+        dispatch({ type: ActionTypeEnum.Update, data });
+        setShowMessage({
+          type: MessageBarType.success,
+          message: "Tarefa Atualizada!",
+        });
+      } else {
+        setShowMessage({
+          type: MessageBarType.error,
+          message: "Erro na atualização!",
+        });
+      }
+    };
+    editTaskId ? updateTaskAction() : addTaskAction();
   }
 
   return (
@@ -69,7 +110,7 @@ const TaskForm = () => {
         </Stack>
         <Stack style={{ width: "20%" }}>
           <button type="submit" className={FormStyle.taskBtn}>
-            Adicionar
+            {editTaskId ? "Atualizar" : "Adicionar"}
           </button>
         </Stack>
       </Stack>

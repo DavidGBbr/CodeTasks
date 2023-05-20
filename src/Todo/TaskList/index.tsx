@@ -3,8 +3,13 @@ import TaskListStyle from "./TaskList.style";
 import { Checkbox, FontIcon, Stack, mergeStyles } from "@fluentui/react";
 import { TodoContext } from "../TodoProvider";
 import { ActionTypeEnum } from "../Types";
+import TaskDescription from "./TaskDescription";
 
-export const TaskList = () => {
+type Props = {
+  setEditTask: (taskId: string) => void;
+};
+
+export const TaskList = ({ setEditTask }: Props) => {
   const { activeTasks, dispatch } = useContext(TodoContext);
 
   const onTaskDelete = (id: string) => {
@@ -12,24 +17,40 @@ export const TaskList = () => {
       dispatch({ type: ActionTypeEnum.Delete, data: { id } });
     }
   };
+
+  const onFavoriteClick = (id: string) => {
+    dispatch({ type: ActionTypeEnum.ToggleFavorite, data: { id } });
+  };
+
+  const checkboxClickedHnd = (id: string) => {
+    dispatch({ type: ActionTypeEnum.Completed, data: { id } });
+  };
   return (
     <div>
       {activeTasks.map((task) => {
         return (
           <Stack horizontal key={task.id} className={TaskListStyle.taskItem}>
             <Stack horizontal style={{ width: "85%", alignItems: "center" }}>
-              <Checkbox />
+              <Checkbox onChange={() => checkboxClickedHnd(task.id)} />
               {task.title}
             </Stack>
             <Stack horizontal style={{ width: "15%" }}>
-              <FontIcon iconName="Info" className={TaskListStyle.iconStyle} />
+              <TaskDescription task={task} />
               <FontIcon
                 iconName={task.isFav ? "FavoriteStarFill" : "FavoriteStar"}
-                className={TaskListStyle.iconStyle}
+                className={
+                  task.isFav
+                    ? mergeStyles(TaskListStyle.iconStyle, { color: "#7c5de8" })
+                    : TaskListStyle.iconStyle
+                }
+                onClick={() => onFavoriteClick(task.id)}
               />
               <FontIcon
                 iconName="EditNote"
                 className={TaskListStyle.iconStyle}
+                onClick={() => {
+                  setEditTask(task.id);
+                }}
               />
               <FontIcon
                 iconName="Delete"
