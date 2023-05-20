@@ -6,6 +6,7 @@ import { TaskList } from "../TaskList";
 import { initializeIcons } from "@fluentui/react";
 import TodoProvider from "../TodoProvider";
 import TaskForm from "../TaskForm";
+import CompletedTaskList from "../TaskList/CompletedTaskList";
 initializeIcons();
 
 export const Home = () => {
@@ -47,7 +48,7 @@ export const Home = () => {
               headerText="Tarefas Completas"
               itemKey={PivotKeysEnum.Completed}
             >
-              <Label>Pivot #3</Label>
+              <CompletedTaskList />
             </PivotItem>
           </Pivot>
         </Stack>

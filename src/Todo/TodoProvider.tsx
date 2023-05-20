@@ -35,6 +35,17 @@ const deleteTaskAction = (state: ITodoState, action: IDeleteAction) => {
   return filteredData;
 };
 
+const deleteCompletedTaskAction = (
+  state: ITodoState,
+  action: IDeleteAction
+) => {
+  const completedTasks: ITask[] = clone(state.completedTasks);
+  const filteredData = completedTasks.filter(
+    (task) => task.id !== action.data.id
+  );
+  return filteredData;
+};
+
 const toggleFavoriteAction = (
   state: ITodoState,
   action: IToggleFavoriteAction
@@ -77,6 +88,11 @@ const reducer = (state: ITodoState, action: IReducerAction) => {
       return { ...state, activeTasks: addTaskAction(state, action) };
     case ActionTypeEnum.Delete:
       return { ...state, activeTasks: deleteTaskAction(state, action) };
+    case ActionTypeEnum.DeleteCompletedTask:
+      return {
+        ...state,
+        completedTasks: deleteCompletedTaskAction(state, action),
+      };
     case ActionTypeEnum.ToggleFavorite:
       return { ...state, activeTasks: toggleFavoriteAction(state, action) };
     case ActionTypeEnum.Update:
