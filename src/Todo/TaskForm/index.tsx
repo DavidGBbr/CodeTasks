@@ -8,6 +8,7 @@ import { ActionTypeEnum, ITask } from "../Types";
 type Props = {
   editTaskId: string | null;
 };
+
 const TaskForm = ({ editTaskId }: Props) => {
   const { activeTasks, dispatch } = useContext(TodoContext);
 
@@ -69,6 +70,8 @@ const TaskForm = ({ editTaskId }: Props) => {
           type: MessageBarType.success,
           message: "Tarefa Atualizada!",
         });
+        title.set("");
+        description.set("");
       } else {
         setShowMessage({
           type: MessageBarType.error,
@@ -103,8 +106,8 @@ const TaskForm = ({ editTaskId }: Props) => {
       <Stack horizontal tokens={{ childrenGap: 20 }} style={{ marginTop: 20 }}>
         <Stack style={{ width: "80%" }}>
           {showMessage.message && (
-            <MessageBar messageBarType={MessageBarType.success}>
-              Tarefa adicionada!
+            <MessageBar messageBarType={showMessage.type}>
+              {showMessage.message}
             </MessageBar>
           )}
         </Stack>

@@ -112,17 +112,23 @@ const TodoProvider = (props: Props) => {
   const tasks: ITask[] = [
     {
       id: "1",
-      title: "Primeira tarefa",
+      title: "Melhorias no formulário de cadastro",
+      description:
+        "Verificar se os campos estão sendo validados, se há erros de validação sendo exibidos adequadamente aos usuários e se as mensagens são enviadas com sucesso. Fazer melhorias na responsividade nos campos de input.",
       isFav: true,
     },
     {
       id: "2",
-      title: "Segunda tarefa",
+      title: "Otimizar o desempenho da página home",
+      description:
+        "Solicionar e resolver problemas de carregamento lento, reduzir o tamanho dos arquivos, minimizar as solicitações de rede e implementar técnicas de cache adequadas.",
       isFav: false,
     },
     {
       id: "3",
-      title: "Terceira tarefa",
+      title: "Carrossel de depoimentos",
+      description:
+        "Criar um carrossel de depoimentos para exibir feedbacks de clientes satisfeitos em um site.",
       isFav: true,
     },
   ];
