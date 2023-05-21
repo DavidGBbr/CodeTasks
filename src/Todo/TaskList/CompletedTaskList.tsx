@@ -43,7 +43,10 @@ const CompletedTaskList = () => {
                 />
                 <FontIcon
                   iconName="Delete"
-                  className={TaskListStyle.iconStyle}
+                  className={mergeStyles(
+                    TaskListStyle.iconStyle,
+                    TaskListStyle.disabled
+                  )}
                   onClick={() => onTaskDelete(task.id)}
                 />
               </Stack>

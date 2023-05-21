@@ -20,6 +20,7 @@ const FormStyle: IProcessedStyleSet<IFormStyle> = mergeStyleSets({
     padding: "0.5rem",
     borderRadius: "0.4rem",
     cursor: "pointer",
+    boxShadow: "0 4px 4px rgba(0,0,0, 0.25)",
     selectors: {
       "&:hover,&:focus": { outline: "none", boxShadow: "0 0 0 1px #9266ff" },
     },
